@@ -21,15 +21,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          BackgroundGradient(),
-          AnimatedSwitcher(
-            duration: Duration(milliseconds: 700),
-            child: _buildChild(),
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        if (screenType == ScreenType.gameType) {
+          setState(() {
+            screenType = ScreenType.player;
+          });
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            BackgroundGradient(),
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 400),
+              child: _buildChild(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -47,13 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Center(
       key: Key('screen-one'),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Column(
             children: [
               Text(
                 'K',
-                style: TextStyle(color: Colors.white, fontSize: 42.0, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.white, fontSize: 48.0, fontWeight: FontWeight.bold),
               ),
               Text(
                 'Tic Tac Toe',
@@ -63,6 +74,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Column(
             children: [
+              Opacity(
+                opacity: 0,
+                child: GameButton(
+                  text: '',
+                  onTap: () {},
+                ),
+              ),
               GameButton(
                 text: '单人游戏',
                 onTap: () {
@@ -98,13 +116,13 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Stack(
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Column(
                 children: [
                   Text(
                     'K',
-                    style: TextStyle(color: Colors.white, fontSize: 42.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.white, fontSize: 48.0, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'Tic Tac Toe',

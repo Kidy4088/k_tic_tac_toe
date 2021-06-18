@@ -27,12 +27,12 @@ class _BackgroundGradientState extends State<BackgroundGradient> with SingleTick
 
   @override
   void initState() {
-    super.initState();
     _animationController = AnimationController(vsync: this, duration: Duration(seconds: 10));
     _animationController.repeat(reverse: true);
     _gradient = gradients[Random().nextInt(gradients.length)];
     _gradientMovementAnim =
         Tween(begin: 0.0, end: 0.45).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
+    super.initState();
   }
 
   @override
@@ -99,15 +99,15 @@ class _BackgroundGradientState extends State<BackgroundGradient> with SingleTick
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
     if (particles.isEmpty) {
       generateParticles();
     }
+    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _animationController.dispose();
+    super.dispose();
   }
 }

@@ -23,7 +23,7 @@ class GameButton extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   text,
-                  style: TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 16.0, height: 1),
                 ),
               ),
             ),

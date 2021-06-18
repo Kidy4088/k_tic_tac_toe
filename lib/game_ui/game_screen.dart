@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:k_tic_tac_toe/game/tic_tac_toe.dart';
 import 'package:k_tic_tac_toe/gradient/background_gradient.dart';
+import 'package:k_tic_tac_toe/r.dart';
 import 'package:k_tic_tac_toe/utils/constants.dart';
+import 'package:rive_loading/rive_loading.dart';
 
 import 'components/game_board.dart';
 
@@ -24,8 +27,8 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   void initState() {
-    super.initState();
     game = TicTacToe(gameBoardType: widget.gameBoardType);
+    super.initState();
   }
 
   @override
@@ -65,6 +68,86 @@ class _GameScreenState extends State<GameScreen> {
                   elementColor: Colors.white.withOpacity(0.8),
                   thickness: 4.0,
                   onResult: () {
+                    showDialog<void>(
+                      context: context,
+                      builder: (BuildContext dialogContext) {
+                        var flag = false;
+                        var refresh;
+                        Future.delayed(Duration(milliseconds: 800), () {
+                          refresh?.call(() {
+                            flag = true;
+                          });
+                        });
+                        return Dialog(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                height: 160,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      child: RiveLoading(
+                                        name: R.assetsRiveCheckpointUi,
+                                        startAnimation: 'checkpoint',
+                                        fit: BoxFit.cover,
+                                        onError: (error, stacktrace) {},
+                                        onSuccess: (data) {},
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.vertical(top: Radius.circular(4.0)),
+                                      ),
+                                    ),
+                                    StatefulBuilder(builder: (context, setState) {
+                                      refresh = setState;
+                                      return Align(
+                                        alignment: Alignment.center,
+                                        child: AnimatedSwitcher(
+                                          duration: Duration(milliseconds: 200),
+                                          transitionBuilder: (child, animation) {
+                                            return FadeTransition(
+                                              opacity: animation,
+                                              child: child,
+                                            );
+                                          },
+                                          child: flag
+                                              ? Text(
+                                                  _buildDialogContent(),
+                                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                                )
+                                              : SizedBox.shrink(),
+                                        ),
+                                      );
+                                    }),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  TextButton(
+                                    child: Text('取消'),
+                                    onPressed: () {
+                                      Navigator.of(dialogContext).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('再来一次'),
+                                    onPressed: () {
+                                      Navigator.of(dialogContext).pop();
+                                      setState(() {
+                                        game.resetBoard();
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
                     setState(() {});
                   },
                   enablePowers: enablePowers,
@@ -146,5 +229,16 @@ class _GameScreenState extends State<GameScreen> {
         ],
       ),
     );
+  }
+
+  String _buildDialogContent() {
+    if (game.gameWinner == null) {
+      return '平局';
+    }
+    if (widget.gamePlayerType == GamePlayerType.onePlayer) {
+      return game.gameWinner == TurnOf.player1 ? '你胜利了！' : '失败是成功之母';
+    } else {
+      return game.gameWinner == TurnOf.player1 ? 'Player 1 胜利！' : 'Player 2 胜利！';
+    }
   }
 }
