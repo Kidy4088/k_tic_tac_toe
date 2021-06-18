@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:k_tic_tac_toe/game/tic_tac_toe.dart';
@@ -68,86 +70,7 @@ class _GameScreenState extends State<GameScreen> {
                   elementColor: Colors.white.withOpacity(0.8),
                   thickness: 4.0,
                   onResult: () {
-                    showDialog<void>(
-                      context: context,
-                      builder: (BuildContext dialogContext) {
-                        var flag = false;
-                        var refresh;
-                        Future.delayed(Duration(milliseconds: 800), () {
-                          refresh?.call(() {
-                            flag = true;
-                          });
-                        });
-                        return Dialog(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                height: 160,
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      child: RiveLoading(
-                                        name: R.assetsRiveCheckpointUi,
-                                        startAnimation: 'checkpoint',
-                                        fit: BoxFit.cover,
-                                        onError: (error, stacktrace) {},
-                                        onSuccess: (data) {},
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.vertical(top: Radius.circular(4.0)),
-                                      ),
-                                    ),
-                                    StatefulBuilder(builder: (context, setState) {
-                                      refresh = setState;
-                                      return Align(
-                                        alignment: Alignment.center,
-                                        child: AnimatedSwitcher(
-                                          duration: Duration(milliseconds: 200),
-                                          transitionBuilder: (child, animation) {
-                                            return FadeTransition(
-                                              opacity: animation,
-                                              child: child,
-                                            );
-                                          },
-                                          child: flag
-                                              ? Text(
-                                                  _buildDialogContent(),
-                                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                                )
-                                              : SizedBox.shrink(),
-                                        ),
-                                      );
-                                    }),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  TextButton(
-                                    child: Text('取消'),
-                                    onPressed: () {
-                                      Navigator.of(dialogContext).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text('再来一次'),
-                                    onPressed: () {
-                                      Navigator.of(dialogContext).pop();
-                                      setState(() {
-                                        game.resetBoard();
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
+                    _showDialog();
                     setState(() {});
                   },
                   enablePowers: enablePowers,
@@ -228,6 +151,75 @@ class _GameScreenState extends State<GameScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return Dialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 160,
+                child: Stack(
+                  children: [
+                    Container(
+                      child: RiveLoading(
+                        name: R.assetsRiveCheckpointUi,
+                        startAnimation: 'checkpoint',
+                        fit: BoxFit.cover,
+                        onError: (error, stacktrace) {},
+                        onSuccess: (data) {},
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(4.0)),
+                      ),
+                    ),
+                    TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0, end: 800),
+                      duration: Duration(milliseconds: 800),
+                      builder: (context, value, child) => Opacity(
+                        opacity: max(0, ((value - 600) / 200)),
+                        child: child,
+                      ),
+                      child: Center(
+                        child: Text(
+                          _buildDialogContent(),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    child: Text('取消'),
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text('再来一次'),
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop();
+                      setState(() {
+                        game.resetBoard();
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
