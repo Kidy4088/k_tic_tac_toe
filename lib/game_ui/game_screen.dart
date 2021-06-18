@@ -157,6 +157,7 @@ class _GameScreenState extends State<GameScreen> {
   void _showDialog() {
     showDialog<void>(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return Dialog(
           child: Column(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:k_tic_tac_toe/game_ui/components/game_button.dart';
 import 'package:k_tic_tac_toe/game_ui/game_screen.dart';
 import 'package:k_tic_tac_toe/gradient/background_gradient.dart';
@@ -35,9 +36,26 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Stack(
           children: [
             BackgroundGradient(),
-            AnimatedSwitcher(
-              duration: Duration(milliseconds: 400),
-              child: _buildChild(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      'K',
+                      style: TextStyle(color: Colors.white, fontSize: 48.0, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Tic Tac Toe',
+                      style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.w300),
+                    ),
+                  ],
+                ),
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 400),
+                  child: _buildChild(),
+                ),
+              ],
             ),
           ],
         ),
@@ -55,140 +73,88 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPlayerScreen() {
-    return Center(
+    return Column(
       key: Key('screen-one'),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(
-            children: [
-              Text(
-                'K',
-                style: TextStyle(color: Colors.white, fontSize: 48.0, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'Tic Tac Toe',
-                style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.w300),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              GameButton(
-                text: '单人游戏',
-                onTap: () {
-                  setState(
-                    () {
-                      playerType = GamePlayerType.onePlayer;
-                      screenType = ScreenType.gameType;
-                    },
-                  );
-                },
-              ),
-              GameButton(
-                text: '双人游戏',
-                onTap: () {
-                  setState(
-                    () {
-                      playerType = GamePlayerType.twoPlayer;
-                      screenType = ScreenType.gameType;
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
+      children: [
+        GameButton(
+          text: '单人游戏',
+          onTap: () {
+            setState(
+              () {
+                playerType = GamePlayerType.onePlayer;
+                screenType = ScreenType.gameType;
+              },
+            );
+          },
+        ),
+        GameButton(
+          text: '双人游戏',
+          onTap: () {
+            setState(
+              () {
+                playerType = GamePlayerType.twoPlayer;
+                screenType = ScreenType.gameType;
+              },
+            );
+          },
+        ),
+        GameButton(
+          text: '退出游戏',
+          onTap: () {
+            SystemNavigator.pop();
+          },
+        ),
+      ],
     );
   }
 
   Widget _buildGameTypeScreen() {
-    return Center(
+    return Column(
       key: Key('screen-two'),
-      child: Stack(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    'K',
-                    style: TextStyle(color: Colors.white, fontSize: 48.0, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Tic Tac Toe',
-                    style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.w300),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  GameButton(
-                    text: '3x3',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GameScreen(
-                            gameBoardType: GameBoardType.threeByThree,
-                            gamePlayerType: playerType,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  GameButton(
-                    text: '5x5',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GameScreen(
-                            gameBoardType: GameBoardType.fiveByFive,
-                            gamePlayerType: playerType,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  GameButton(
-                    text: '7x7',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GameScreen(
-                            gameBoardType: GameBoardType.sevenBySeven,
-                            gamePlayerType: playerType,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SafeArea(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios_outlined,
-                  color: Colors.white,
+      children: [
+        GameButton(
+          text: '3x3',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GameScreen(
+                  gameBoardType: GameBoardType.threeByThree,
+                  gamePlayerType: playerType,
                 ),
-                onPressed: () {
-                  setState(() {
-                    screenType = ScreenType.player;
-                  });
-                },
               ),
-            ),
-          ),
-        ],
-      ),
+            );
+          },
+        ),
+        GameButton(
+          text: '5x5',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GameScreen(
+                  gameBoardType: GameBoardType.fiveByFive,
+                  gamePlayerType: playerType,
+                ),
+              ),
+            );
+          },
+        ),
+        GameButton(
+          text: '7x7',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GameScreen(
+                  gameBoardType: GameBoardType.sevenBySeven,
+                  gamePlayerType: playerType,
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

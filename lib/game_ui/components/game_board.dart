@@ -41,6 +41,7 @@ class _GameBoardState extends State<GameBoard> {
   void _showPowerDialog() async {
     var result = await showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           backgroundColor: Colors.white.withOpacity(0.85),
@@ -84,7 +85,6 @@ class _GameBoardState extends State<GameBoard> {
           ),
         );
       },
-      barrierDismissible: false,
     );
 
     if (result) {

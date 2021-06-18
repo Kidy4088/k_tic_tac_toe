@@ -4,7 +4,7 @@ class GameButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  GameButton({required this.text, required this.onTap});
+  const GameButton({required this.text, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
