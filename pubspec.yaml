@@ -50,7 +50,7 @@ flutter:
   assets:
     # assets-generator-begin
     # assets/rive/*
-    - assets/rive/196-360-loading.riv
+    - assets/rive/loading.riv
     - assets/rive/checkpoint_ui.riv
     # assets-generator-end
 

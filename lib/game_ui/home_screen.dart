@@ -74,13 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Column(
             children: [
-              Opacity(
-                opacity: 0,
-                child: GameButton(
-                  text: '',
-                  onTap: () {},
-                ),
-              ),
               GameButton(
                 text: '单人游戏',
                 onTap: () {
